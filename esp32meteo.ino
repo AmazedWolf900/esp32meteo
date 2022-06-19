@@ -12,6 +12,15 @@
 #include "WiFi.h"
 const unsigned long wifiConnectionTimeout = 15000; // ...in milliseconds
 
+// Wire library for I2C
+#include <Wire.h>
+// BME280
+#include <SPI.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
+#define BME280_ADDRESS (0x76)
+Adafruit_BME280 bme280;
+
 // pins definition
 // RGB led pins
 const int RGBpin[3] = {
@@ -21,6 +30,9 @@ const int RGBpin[3] = {
 };
 // LDR ADC pin
 const int LDRpin = 34;
+// I2C pins
+const int I2C_SDA = 15;
+const int I2C_SCL = 2;
 
 bool wifiConnect();
 void blinkJobTypeCode(int iterations);
@@ -28,6 +40,7 @@ void blinkStatusCode(int color);
 
 void setup() {
     Serial.begin(115200);
+    Wire.begin(I2C_SDA, I2C_SCL);
 
     // set the pinMode for the RGBpin led pins
     Serial.print("Setting pinMode for RGBpin led pins. ");
